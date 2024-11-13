@@ -34,15 +34,17 @@ class Login : AppCompatActivity() {
     }
 
     private fun loginUser() {
-        val email = emailEditText.text.toString().trim()
+        val inputText = emailEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
 
         // Получаем данные из SharedPreferences
         val savedEmail = sharedPreferences.getString("email", null)
+        val savedPhone = sharedPreferences.getString("phone",null)
         val savedPassword = sharedPreferences.getString("password", null)
 
+
         // Проверка введённых данных
-        if (email == savedEmail && password == savedPassword) {
+        if ((inputText == savedEmail || inputText == savedPhone) && password == savedPassword) {
             // Данные совпадают, сохраняем состояние автологина
             with(sharedPreferences.edit()) {
                 putBoolean("autoLogin", autoLoginCheckBox.isChecked)

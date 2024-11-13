@@ -19,29 +19,19 @@ class Splash : AppCompatActivity() {
         val email = sharedPreferences.getString("email",null)
         val password = sharedPreferences.getString("password",null)
         val autoLogin = sharedPreferences.getBoolean("autoLogin",false)
-        val phone = sharedPreferences.getString("phone", null)
+        val input = sharedPreferences.getString("phone", null)
 
 
-        if (email != null && password != null) {
+        if ((email != null || input != null) && password != null) {
             if (autoLogin) {
                 startActivity(Intent(this, Content::class.java))
-            } else {
+            } else
                 startActivity(Intent(this, Login::class.java))
             }
-        } else {
+         else {
             startActivity(Intent(this, Registration::class.java))
         }
     }
 }
 
-//        if(email != null && password != null){
-//            if (autoLogin){
-//                startActivity(Intent(this,Content::class.java))
-//            }
-//            else{
-//                startActivity(Intent(this,Login::class.java))
-//            }
-//            else{
-//            startActivity(Intent(this,Registration::class.java))
-//             }
-//        }
+

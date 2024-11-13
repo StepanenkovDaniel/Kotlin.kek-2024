@@ -45,28 +45,37 @@ class Registration : AppCompatActivity() {
             email_users_taxt.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         }
 
-        regestr_button.setOnClickListener(){
-            val email_vvod = email_users_taxt.text.toString().trim()
+        regestr_button.setOnClickListener {
+            val input = email_users_taxt.text.toString().trim() // Либо email, либо телефон
             val password = password_more.text.toString().trim()
-            if(!(email_vvod.contains("@"))){
-                Toast.makeText(this,"Некорректный email",Toast.LENGTH_SHORT).show()
+
+            // Проверка на корректность введеных данных
+            if (isOptionSelected) { // Регистрация по номеру телефона
+                if (!input.contains("+")) {
+                    Toast.makeText(this, "Некорректный номер телефона", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            } else { // Регистрация по email
+                if (!input.contains("@")) {
+                    Toast.makeText(this, "Некорректный email", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+            if (password.length < 8) {
+                Toast.makeText(this, "Пароль должен содержать 8 символов", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (password_try.length()<8){
-                Toast.makeText(this,"Пароль должен содержать 8 элементов", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if(email_vvod.contains("+")){
-                Toast.makeText(this,"Неправельный номер телефона!",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if(password_try.text.toString() != password_more.text.toString()){
-                Toast.makeText(this ,"Пароди не совпадают",Toast.LENGTH_SHORT).show()
+            if (password != password_try.text.toString()) {
+                Toast.makeText(this, "Пароли не совпадают", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             //Сохраняем данные в SharedPreferences
             with(sharedPreferences.edit()) {
-                putString("email", email_vvod)
+                if (isOptionSelected) {
+                    putString("phone", input) // Сохраняем номер телефона
+                } else {
+                    putString("email", input) // Сохраняем email
+                }
                 putString("password", password)
                 putBoolean("autoLogin", false)
                 apply()
